@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc-4.0.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
+
+	<!--<import resource="classpath:spring/application-datasource.xml"/>
+	<import resource="classpath:spring/application-dao.xml"/>-->
+
+	<context:property-placeholder location="classpath:db.properties"/>
+
+	<!-- 配置druid数据源 -->
+	<bean name="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+		<property name="url" value="${druid.jdbc.url}" />
+		<property name="username" value="${druid.jdbc.username}" />
+		<property name="password" value="${druid.jdbc.password}" />
+
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${druid.initialSize}" />
+		<!-- 连接池最大使用连接数量 -->
+		<property name="maxActive" value="${druid.maxActive}" />
+		<!-- 连接池最大空闲 ,据说已经不再使用
+		<property name="maxIdle" value="${druid.maxIdle}" />-->
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${druid.minIdle}" />
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="${druid.maxWait}" />
+
+		<!-- <property name="poolPreparedStatements" value="true" /> <property name="maxPoolPreparedStatementPerConnectionSize" value="33" /> -->
+
+		<property name="validationQuery" value="${druid.validationQuery}" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+		<property name="testWhileIdle" value="true" />
+
+		<!-- timeBetweenEvictionRunsMillis毫秒秒检查一次连接池中空闲的连接,把空闲时间超过minEvictableIdleTimeMillis毫秒的连接断开,直到连接池中的连接数到minIdle为止 -->
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}" />
+
+		<!-- 打开removeAbandoned功能 -->
+		<property name="removeAbandoned" value="true" />
+		<!-- 1800秒，也就是30分钟 -->
+		<property name="removeAbandonedTimeout" value="${druid.removeAbandonedTimeout}" />
+		<!-- 关闭abanded连接时输出错误日志 -->
+		<property name="logAbandoned" value="true" />
+
+		<!-- 监控数据库 -->
+		<!-- <property name="filters" value="stat" /> -->
+		<property name="filters" value="mergeStat" />
+	</bean>
+	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource">
+			<ref bean="dataSource"></ref>
+		</property>
+		<property name="mapperLocations">
+			<list>
+				<value>classpath:/sqlmap/**/sqlmap*.xml</value>
+			</list>
+		</property>
+		<!--<property name="configLocation" value="classpath:config/SqlMapConfig.xml"></property>-->
+	</bean>
+
+
+	<bean id="baseDao" class="core.BaseDao">
+		<constructor-arg index="0">
+			<ref bean="sqlSessionFactory"></ref>
+		</constructor-arg>
+
+	</bean>
+	
+</beans>
