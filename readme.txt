@@ -1,4 +1,5 @@
 class{
-	int a;
+	Float a;
 	String b;
+	int c;
 }
