@@ -3,18 +3,35 @@
 <!-- 为这个mapper指定一个唯一的namespace，namespace的值习惯上设置成包名+sql映射文件名，这样就能够保证namespace的值是唯一的
 例如namespace="me.gacl.mapping.userMapper"就是me.gacl.mapping(包名)+userMapper(userMapper.xml文件去除后缀)
  -->
-<mapper namespace="addr">
+<mapper namespace="User">
 
 
-    <resultMap type="com.app.entity.Address" id="addrResult">
-        <result column="id" property="id"/>
-        <result column="des" property="des"/>
+    <resultMap id="userMap" type="com.entity.User" extends="commonModel.commonResultMap">
+        <id column="id" property="id" />
+        <result column="username" property="username"/>
+        <result column="email" property="email"/>
+        <result column="telephone" property="telephone"/>
+        <result column="website" property="website"/>
+        <result column="profile" property="profile"/>
     </resultMap>
 
+    <sql id="userCommonSql">
+        select
+          user.id,
+          user.username,
+          user.email,
+          user.telephone,
+          user.website,
+          user.profile
+        from myonly.user
+    </sql>
 
-    <select id="findAddressById" parameterType="int"
-            resultMap="addrResult">
-        select id,des from address where id=#{id}
+    <select id="findUserById" parameterType="java.lang.Integer"
+        resultMap="userMap">
+        <include refid="userCommonSql" />
+        <where>
+            user.id = #{id}
+        </where>
     </select>
 
 </mapper>

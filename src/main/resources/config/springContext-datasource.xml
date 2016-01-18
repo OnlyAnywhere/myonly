@@ -16,9 +16,6 @@
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd">
 
-	<!--<import resource="classpath:spring/application-datasource.xml"/>
-	<import resource="classpath:spring/application-dao.xml"/>-->
-
 	<context:property-placeholder location="classpath:db.properties"/>
 
 	<!-- 配置druid数据源 -->
@@ -75,11 +72,5 @@
 	</bean>
 
 
-	<bean id="baseDao" class="core.BaseDao">
-		<constructor-arg index="0">
-			<ref bean="sqlSessionFactory"></ref>
-		</constructor-arg>
-
-	</bean>
 	
 </beans>
