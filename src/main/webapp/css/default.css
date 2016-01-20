@@ -1,0 +1,7 @@
+body,div,span,p,pre,span,h1,h2,h3,h4,h5,h6,th,td{padding: 0;margin: 0;}
+table{}
+.header{min-height: 30px;background-color: #698cba;width: 100%;min-width: 1000px;}
+.buttom{min-height: 50px;background-color: #919191;width: 100%;min-width: 1000px;border: none}
+.tabs{min-height: 26px;background-color: #AACCFF;width: 100%;}
+
+.bodyArea{min-width: 1000px;}
